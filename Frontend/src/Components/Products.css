@@ -1,0 +1,24 @@
+/* Adding CSS styles to enhance the appearance of the table */
+.container {
+    padding: 50px;
+  }
+  
+  .table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .table th, .table td {
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .table th {
+    border-bottom: 1px solid #ddd;
+    background: #f2f2f2;
+  }
+  
+  .table td {
+    border-bottom: 1px solid #ddd;
+  }
+  

@@ -1,42 +1,27 @@
-// from: https://www.youtube.com/watch?v=Q3ixb1w-QaY,
-// then added in css styling to make the table look better 
-// link: http://localhost:5173/
-
-import React, { useEffect, useState } from 'react';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Products from "./Components/Products"; // Importing the Products component
+import Header from "./Components/Header";
+import ProductForm from "./Components/ProductForm";
 
 function App() {
-  const [data, setData] = useState([]);
-  
-  useEffect(() => {
-    fetch('http://localhost:8071/products')
-      .then(res => res.json())
-      .then(data => setData(data))
-      .catch(err => console.log(err));
-  }, []);
-  
   return (
-    <div style={{ padding: "50px" }}>
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
-        <thead>
-          <tr style={{ borderBottom: "1px solid #ddd", background: "#f2f2f2" }}>
-            <th style={{ padding: "8px", textAlign: "left" }}>Product Name</th>
-            <th style={{ padding: "8px", textAlign: "left" }}>Product ID</th>
-            <th style={{ padding: "8px", textAlign: "left" }}>Stock</th>
-            <th style={{ padding: "8px", textAlign: "left" }}>Supplier ID</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((d, i) => (
-            <tr key={i} style={{ borderBottom: "1px solid #ddd" }}>
-              <td style={{ padding: "8px", textAlign: "left" }}>{d.product_name}</td>
-              <td style={{ padding: "8px", textAlign: "left" }}>{d.product_id}</td>
-              <td style={{ padding: "8px", textAlign: "left" }}>{d.stock}</td>
-              <td style={{ padding: "8px", textAlign: "left" }}>{d.supplier_id}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route
+          path="/products"
+          element={
+            <>
+              {<Products />}
+              {<ProductForm />}
+            </>
+          }
+        />
+        {/* Route to Products component when URL matches /products */}
+        {/* Define other routes if needed */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 
