@@ -83,6 +83,26 @@ app.delete("/deleteProduct/:productId", (req, res) => {
   });
 });
 
+// Route to update the stock value of a product
+app.put("/updateProduct/:productId", (req, res) => {
+  const productId = req.params.productId;
+  const { newStock } = req.body;
+
+  // Update query to update the stock value of the product
+  const sql = "UPDATE products SET stock = ? WHERE product_id = ?";
+  
+  db.query(sql, [newStock, productId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json({ message: "Product stock updated successfully" });
+  });
+});
+
 // Start the server
 app.listen(8071, () => {
   console.log("Server is working on port 8071");

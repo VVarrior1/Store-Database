@@ -4,6 +4,8 @@ import Products from "./Components/Products";
 import Header from "./Components/Header";
 import ProductForm from "./Components/ProductForm";
 import DeleteForm from "./Components/DeleteForm";
+import UpdateForm from "./Components/UpdateForm";
+
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
             <>
               {<Products />}
               {<ProductForm />}
+              {<UpdateForm />}
               {<DeleteForm />}
             </>
           }
