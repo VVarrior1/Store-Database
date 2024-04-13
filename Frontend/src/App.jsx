@@ -11,7 +11,6 @@ import Products from "./Components/Products";
 import Home from "./Components/Home";
 
 function App() {
-  // To use useLocation, you need to ensure that it is used inside the context of BrowserRouter
   return (
     <BrowserRouter>
       <AppContent />
