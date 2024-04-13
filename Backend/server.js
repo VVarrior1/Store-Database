@@ -113,6 +113,22 @@ app.delete("/deleteProduct/:productId", (req, res) => {
   });
 });
 
+// Route that deletes an existing transaction
+app.delete("/deleteTransaction/:transactionId", (req, res) => {
+  const transactionId = req.params.transactionId;
+  const sql = "DELETE FROM transactions WHERE transaction_id = ?";
+  db.query(sql, transactionId, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+    res.json({ message: "Transaction deleted successfully" });
+  });
+});
+
 // Route to update the stock value of a product
 app.put("/updateProduct/:productId", (req, res) => {
   const productId = req.params.productId;
@@ -135,7 +151,13 @@ app.put("/updateProduct/:productId", (req, res) => {
 
 // Route to insert a new transaction
 app.post("/insertTransaction", (req, res) => {
-  const { customer_id, customer_name, purchase_amount, product_id } = req.body;
+  const {
+    transaction_id,
+    customer_id,
+    customer_name,
+    purchase_amount,
+    product_id,
+  } = req.body;
 
   // Check if the product_id exists in the products table
   const checkProductQuery = "SELECT * FROM products WHERE product_id = ?";
@@ -169,10 +191,16 @@ app.post("/insertTransaction", (req, res) => {
 
       // Insert the transaction
       const insertQuery =
-        "INSERT INTO transactions (customer_id, customer_name, purchase_amount, product_id) VALUES (?, ?, ?, ?)";
+        "INSERT INTO transactions (transaction_id,customer_id, customer_name, purchase_amount, product_id) VALUES (?,?, ?, ?, ?)";
       db.query(
         insertQuery,
-        [customer_id, customer_name, purchase_amount, product_id],
+        [
+          transaction_id,
+          customer_id,
+          customer_name,
+          purchase_amount,
+          product_id,
+        ],
         (err, result) => {
           if (err) {
             console.error(err);
