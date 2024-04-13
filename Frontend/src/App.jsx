@@ -1,8 +1,13 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Products from "./Components/Products"; // Importing the Products component
+import Products from "./Components/Products"; 
 import Header from "./Components/Header";
 import ProductForm from "./Components/ProductForm";
+import DeleteForm from "./Components/DeleteForm";
+import UpdateForm from "./Components/UpdateForm";
+import Transactions from "./Components/Transactions";
+import TransactionsForm from "./Components/TransactionsForm";
+
 
 function App() {
   return (
@@ -15,11 +20,20 @@ function App() {
             <>
               {<Products />}
               {<ProductForm />}
+              {<UpdateForm />}
+              {<DeleteForm />}
             </>
           }
         />
-        {/* Route to Products component when URL matches /products */}
-        {/* Define other routes if needed */}
+        <Route
+          path="/transactions"
+          element={
+            <>
+              {<Transactions />}
+              {<TransactionsForm />}
+            </>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

@@ -1,4 +1,3 @@
-/* Adding CSS styles to enhance the appearance of the table */
 .container {
   padding: 50px;
 }
@@ -22,3 +21,6 @@
 .table td {
   border-bottom: 1px solid #ddd;
 }
+
+
+
