@@ -6,6 +6,7 @@ import ProductForm from "./Components/ProductForm";
 import DeleteForm from "./Components/DeleteForm";
 import UpdateForm from "./Components/UpdateForm";
 import Transactions from "./Components/Transactions";
+import TransactionsForm from "./Components/TransactionsForm";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           element={
             <>
               {<Transactions />}
+              {<TransactionsForm />}
             </>
           }
         />
