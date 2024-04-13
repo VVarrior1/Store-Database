@@ -5,6 +5,7 @@ import Header from "./Components/Header";
 import ProductForm from "./Components/ProductForm";
 import DeleteForm from "./Components/DeleteForm";
 import UpdateForm from "./Components/UpdateForm";
+import Transactions from "./Components/Transactions";
 
 
 function App() {
@@ -20,6 +21,14 @@ function App() {
               {<ProductForm />}
               {<UpdateForm />}
               {<DeleteForm />}
+            </>
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            <>
+              {<Transactions />}
             </>
           }
         />

@@ -46,6 +46,18 @@ app.get("/products", (req, res) => {
   });
 });
 
+// Route to fetch all transactions
+app.get("/transactions", (req, res) => {
+  const sql = "SELECT * FROM transactions";
+  db.query(sql, (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+    res.json(data);
+  });
+});
+
 // Route to insert a new product in
 app.post("/insertProduct", (req, res) => {
   const { product_name, product_id, stock, supplier_id } = req.body;
@@ -100,6 +112,54 @@ app.put("/updateProduct/:productId", (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
     res.json({ message: "Product stock updated successfully" });
+  });
+});
+
+// MIGHT BE TEMP
+// Route to check if a product exists by product_id
+app.get("/checkProduct/:productId", (req, res) => {
+  const productId = req.params.productId;
+  const sql = "SELECT COUNT(*) AS count FROM products WHERE product_id = ?";
+  db.query(sql, productId, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+    const count = result[0].count;
+    if (count > 0) {
+      res.json({ exists: true });
+    } else {
+      res.json({ exists: false });
+    }
+  });
+});
+
+// Route to insert a new transaction
+app.post("/insertTransaction", (req, res) => {
+  const { customer_id, customer_name, purchase_amount, product_id } = req.body;
+
+  // Check if the product_id exists in the products table
+  const checkProductQuery = "SELECT COUNT(*) AS count FROM products WHERE product_id = ?";
+  db.query(checkProductQuery, product_id, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+    const productExists = result[0].count > 0;
+
+    if (!productExists) {
+      return res.status(400).json({ message: "Product does not exist" });
+    }
+
+    // Insert the transaction if the product exists
+    const insertQuery = "INSERT INTO transactions (customer_id, customer_name, purchase_amount, product_id) VALUES (?, ?, ?, ?)";
+    db.query(insertQuery, [customer_id, customer_name, purchase_amount, product_id], (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json(err);
+      }
+      res.status(201).json({ message: "Transaction inserted successfully" });
+    });
   });
 });
 
