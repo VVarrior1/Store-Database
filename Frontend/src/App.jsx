@@ -1,8 +1,9 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Products from "./Components/Products"; // Importing the Products component
+import Products from "./Components/Products"; 
 import Header from "./Components/Header";
 import ProductForm from "./Components/ProductForm";
+import DeleteForm from "./Components/DeleteForm";
 
 function App() {
   return (
@@ -15,11 +16,10 @@ function App() {
             <>
               {<Products />}
               {<ProductForm />}
+              {<DeleteForm />}
             </>
           }
         />
-        {/* Route to Products component when URL matches /products */}
-        {/* Define other routes if needed */}
       </Routes>
     </BrowserRouter>
   );

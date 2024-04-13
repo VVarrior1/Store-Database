@@ -15,6 +15,20 @@ function ProductForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // checks for the insert to make sure that the insert is putting in correct inputs 
+    if (product.stock <= 0) {
+      alert("Stock must be greater than 0.");
+      return; 
+    }
+    if (product.product_id.length != 9) {
+      alert("Product ID must be exactly 9 digits long.");
+      return; 
+    }
+    if (product.supplier_id.length !== 3) {
+      alert("Supplier ID must be exactly 3 digits long.");
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:8071/insertProduct', {
         method: 'POST',
@@ -25,12 +39,17 @@ function ProductForm() {
       });
       const data = await response.json();
       console.log(data);
+
+      window.location.reload(); // Reloads the pages so that the table is refreshed
+      
       alert(data.message); // Show a simple alert with the response message
+       
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
+  // Setting up the submit form (using css to format/style it)
   return (
     <div className="product-form-container">
       <h2>Add Product</h2>
@@ -51,7 +70,7 @@ function ProductForm() {
           <label>Supplier ID:</label>
           <input type="text" name="supplier_id" value={product.supplier_id} onChange={handleChange} required />
         </div>
-        <button type="submit" className="submit-button">Submit</button>
+        <button type="submit" className="submit-button">Add</button>
       </form>
     </div>
   );

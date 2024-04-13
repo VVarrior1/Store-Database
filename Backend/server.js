@@ -46,7 +46,7 @@ app.get("/products", (req, res) => {
   });
 });
 
-// Route to insert a new product
+// Route to insert a new product in
 app.post("/insertProduct", (req, res) => {
   const { product_name, product_id, stock, supplier_id } = req.body;
   const sql =
@@ -65,6 +65,22 @@ app.post("/insertProduct", (req, res) => {
       });
     }
   );
+});
+
+// Route that deletees an existing product 
+app.delete("/deleteProduct/:productId", (req, res) => {
+  const productId = req.params.productId;
+  const sql = "DELETE FROM products WHERE product_id = ?";
+  db.query(sql, productId, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json({ message: "Product deleted successfully" });
+  });
 });
 
 // Start the server
