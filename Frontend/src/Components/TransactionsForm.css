@@ -1,46 +1,45 @@
 .transaction-form-container {
-    max-width: 300px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
-  
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .transaction-form-group {
-    margin-bottom: 15px;
-  }
-  
-  .transaction-form-group label {
-    display: block;
-    margin-bottom: 10px;
-  }
-  
-  .transaction-form-group input {
-    width: 95%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .transaction-add-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background-color: #3d3d3d;
-    color: white;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  .transaction-add-button:hover {
-    background-color: #00b348;
-  }
-  
+  width: 300px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.transaction-form-group {
+  margin-bottom: 15px;
+}
+
+.transaction-form-group label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.transaction-form-group input {
+  width: 95%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.transaction-add-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #3d3d3d;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.transaction-add-button:hover {
+  background-color: #00b348;
+}
