@@ -54,23 +54,23 @@ function ProductForm() {
     <div className="product-form-container">
       <h2>Add Product</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div className="product-form-group">
           <label>Product Name:</label>
           <input type="text" name="product_name" value={product.product_name} onChange={handleChange} required />
         </div>
-        <div className="form-group">
+        <div className="product-form-group">
           <label>Product ID:</label>
           <input type="text" name="product_id" value={product.product_id} onChange={handleChange} required />
         </div>
-        <div className="form-group">
+        <div className="product-form-group">
           <label>Stock:</label>
           <input type="number" name="stock" value={product.stock} onChange={handleChange} required />
         </div>
-        <div className="form-group">
+        <div className="product-form-group">
           <label>Supplier ID:</label>
           <input type="text" name="supplier_id" value={product.supplier_id} onChange={handleChange} required />
         </div>
-        <button type="submit" className="submit-button">Add</button>
+        <button type="product-submit" className="add-button">Add</button>
       </form>
     </div>
   );
