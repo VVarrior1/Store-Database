@@ -61,25 +61,43 @@ app.get("/transactions", (req, res) => {
 // Route to insert a new product in
 app.post("/insertProduct", (req, res) => {
   const { product_name, product_id, stock, supplier_id } = req.body;
-  const sql =
-    "INSERT INTO products (product_name, product_id, stock, supplier_id) VALUES (?, ?, ?, ?)";
-  db.query(
-    sql,
-    [product_name, product_id, stock, supplier_id],
-    (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json(err);
-      }
-      res.status(201).json({
-        message: "Product inserted successfully",
-        productId: result.insertId,
-      });
+
+  // First, a SQL query to check if there is already a product with the provided product_id
+  const checkSql = "SELECT product_id FROM products WHERE product_id = ?";
+  db.query(checkSql, [product_id], (err, result) => {
+    if (err) {
+      // If there is an error executing the query, log it and send a 500 error response
+      console.error(err);
+      return res.status(500).json({ message: "Error checking product ID" });
     }
-  );
+    // Check the length of the result array; if it is greater than 0, it means at least one record was found
+    // This indicates that a product with this product_id already exists in the database
+    if (result.length > 0) {
+      // If the product_id already exists, return a 409 Conflict status, indicating a duplicate entry
+      return res.status(409).json({ message: "Product ID already exists" });
+    }
+
+    // If no existing product_id is found, proceed to insert the new product
+    const sql =
+      "INSERT INTO products (product_name, product_id, stock, supplier_id) VALUES (?, ?, ?, ?)";
+    db.query(
+      sql,
+      [product_name, product_id, stock, supplier_id],
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: "Error inserting product" });
+        }
+        res.status(201).json({
+          message: "Product inserted successfully",
+          productId: result.insertId,
+        });
+      }
+    );
+  });
 });
 
-// Route that deletees an existing product 
+// Route that deletees an existing product
 app.delete("/deleteProduct/:productId", (req, res) => {
   const productId = req.params.productId;
   const sql = "DELETE FROM products WHERE product_id = ?";
@@ -102,7 +120,7 @@ app.put("/updateProduct/:productId", (req, res) => {
 
   // Update query to update the stock value of the product
   const sql = "UPDATE products SET stock = ? WHERE product_id = ?";
-  
+
   db.query(sql, [newStock, productId], (err, result) => {
     if (err) {
       console.error(err);
@@ -115,7 +133,6 @@ app.put("/updateProduct/:productId", (req, res) => {
   });
 });
 
-
 // Route to insert a new transaction
 app.post("/insertTransaction", (req, res) => {
   const { customer_id, customer_name, purchase_amount, product_id } = req.body;
@@ -127,7 +144,7 @@ app.post("/insertTransaction", (req, res) => {
       console.error(err);
       return res.status(500).json(err);
     }
-    
+
     if (products.length === 0) {
       return res.status(400).json({ message: "Product does not exist" });
     }
@@ -142,7 +159,8 @@ app.post("/insertTransaction", (req, res) => {
 
     // Update the stock amount in the Products table
     const updatedStock = currentStock - purchase_amount;
-    const updateStockQuery = "UPDATE products SET stock = ? WHERE product_id = ?";
+    const updateStockQuery =
+      "UPDATE products SET stock = ? WHERE product_id = ?";
     db.query(updateStockQuery, [updatedStock, product_id], (err, result) => {
       if (err) {
         console.error(err);
@@ -150,14 +168,21 @@ app.post("/insertTransaction", (req, res) => {
       }
 
       // Insert the transaction
-      const insertQuery = "INSERT INTO transactions (customer_id, customer_name, purchase_amount, product_id) VALUES (?, ?, ?, ?)";
-      db.query(insertQuery, [customer_id, customer_name, purchase_amount, product_id], (err, result) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json(err);
+      const insertQuery =
+        "INSERT INTO transactions (customer_id, customer_name, purchase_amount, product_id) VALUES (?, ?, ?, ?)";
+      db.query(
+        insertQuery,
+        [customer_id, customer_name, purchase_amount, product_id],
+        (err, result) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json(err);
+          }
+          res
+            .status(201)
+            .json({ message: "Transaction inserted successfully" });
         }
-        res.status(201).json({ message: "Transaction inserted successfully" });
-      });
+      );
     });
   });
 });

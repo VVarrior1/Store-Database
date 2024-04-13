@@ -1,34 +1,54 @@
-import React, { useState } from 'react';
-import './DeleteForm.css'; // Import the CSS file for styling
+import React, { useState, useEffect } from "react";
+import "./DeleteForm.css"; // Import the CSS file for styling
 
 function DeleteForm() {
-  const [productId, setProductId] = useState('');
+  const [products, setProducts] = useState([]); // Holds the list of products fetched from the database
+  const [productId, setProductId] = useState(""); // Holds the selected product ID for deletion
+
+  // useEffect hook to fetch products from the database on component mount
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        // Make an HTTP GET request to fetch all products
+        const response = await fetch("http://localhost:8071/products");
+        const data = await response.json();
+        setProducts(data); // Store the fetched products in state
+        if (data.length > 0) {
+          // Automatically select the first product's ID as the default
+          setProductId(data[0].product_id);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleChange = (e) => {
+    // Update the productId state when the dropdown selection changes
     setProductId(e.target.value);
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if(productId.length != 9){
-        alert("Product ID must be exactly 9 digits long.")
-        return;
-    }
+    e.preventDefault(); // Prevent the form from submitting the traditional way
 
     try {
-      const response = await fetch(`http://localhost:8071/deleteProduct/${productId}`, {
-        method: 'DELETE',
-      });
-      const data = await response.json();
+      // Make an HTTP DELETE request to delete the selected product
+      const response = await fetch(
+        `http://localhost:8071/deleteProduct/${productId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await response.json(); // Parse the JSON response from the server
       console.log(data);
 
-      window.location.reload(); // Reloads the pages so that the table is refreshed
+      window.location.reload(); // Reloads the page to refresh the data (optional)
 
-      alert(data.message); // Show a simple alert with the response message
-       
+      alert(data.message); // Show an alert with the message from the server response
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error); // Log any errors to the console
     }
   };
 
@@ -38,9 +58,23 @@ function DeleteForm() {
       <form onSubmit={handleSubmit}>
         <div className="delete-form-group">
           <label>Product ID:</label>
-          <input type="text" name="product_id" value={productId} onChange={handleChange} required />
+          {/* Dropdown menu for selecting the product ID to delete */}
+          <select
+            name="product_id"
+            value={productId}
+            onChange={handleChange}
+            required
+          >
+            {products.map((product) => (
+              <option key={product.product_id} value={product.product_id}>
+                {product.product_name} (ID: {product.product_id})
+              </option>
+            ))}
+          </select>
         </div>
-        <button type="delete" className="delete-button">Delete</button>
+        <button type="submit" className="delete-button">
+          Delete
+        </button>
       </form>
     </div>
   );
