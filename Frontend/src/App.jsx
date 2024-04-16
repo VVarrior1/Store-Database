@@ -1,12 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import ProductsData from "./Components/ProductsData";
 import Header from "./Components/Header";
-import ProductForm from "./Components/ProductForm";
-import DeleteForm from "./Components/DeleteForm";
-import UpdateForm from "./Components/UpdateForm";
 import Transactions from "./Components/Transactions";
-import TransactionsForm from "./Components/TransactionsForm";
 import Products from "./Components/Products";
 import Home from "./Components/Home";
 

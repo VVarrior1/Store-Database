@@ -25,7 +25,7 @@ function Transactions() {
             <th>Transaction ID</th>
 
             <th>Customer ID</th>
-            <th>CUstomer Name</th>
+            <th>Customer Name</th>
             <th>Purchase Amount</th>
             <th>Product ID</th>
           </tr>

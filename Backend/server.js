@@ -1,15 +1,21 @@
-// Importing required modules
+// REFERENCES ARE IN THE COMMENTS THROUGHOUT THIS JAVASCRIPT FILE 
+// AND ALSO THROUGHOUT THE ENTIRE PROJECT FILES. 
+
+// The package.json file above comes from the "init -y" command (followed from https://www.youtube.com/watch?v=Q3ixb1w-QaY&t=624s at 1:11)
+// The package-lock.json files above comes from the "install express mysql cors nodemon" command (followed from https://www.youtube.com/watch?v=Q3ixb1w-QaY&t=624s at 1:42) 
+
+
+// This starter code below which connects to the MySQL database comes from https://www.youtube.com/watch?v=Q3ixb1w-QaY&t=624s by "Code With Yousaf" 
+// The reference to this video starts here ... 
+
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
 
-// Creating an Express application
 const app = express();
-
-// Using CORS middleware to allow cross-origin requests
 app.use(cors());
 
-// Parse JSON bodies (as sent by API clients)
+
 app.use(express.json());
 
 // Creating a connection to MySQL database
@@ -20,77 +26,86 @@ const db = mysql.createConnection({
   database: "store_database",
 });
 
-// Connect to MySQL and handle any errors
-db.connect((err) => {
-  if (err) {
-    console.error("Error connecting to the database:", err);
-    return;
-  }
-  console.log("Connected to MySQL database");
-});
-
-// Route for the root URL
 app.get("/", (req, res) => {
-  res.json("From backend side!!");
+  res.json("From backend side!");
 });
 
-// Route to fetch all products
+// Start the server (listens for port)
+app.listen(8071, () => {
+  console.log("Server is working on port 8071");
+});
+
+// Route to fetch all products (modification of the /users code in the video reference)
 app.get("/products", (req, res) => {
+  // SQL selecting from products table in db (database).
   const sql = "SELECT * FROM products";
   db.query(sql, (err, data) => {
+    // If error return a status message 
     if (err) {
       console.error(err);
-      return res.status(500).json(err);
+      return res.json(err);
     }
     res.json(data);
   });
 });
 
-// Route to fetch all transactions
+// Route to fetch all transactions (modification of the /users code in the video reference)
 app.get("/transactions", (req, res) => {
   const sql = "SELECT * FROM transactions";
   db.query(sql, (err, data) => {
     if (err) {
       console.error(err);
-      return res.status(500).json(err);
+      return res.json(err);
     }
     res.json(data);
   });
 });
 
-// Route to insert a new product in
-app.post("/insertProduct", (req, res) => {
-  const { product_name, product_id, stock, supplier_id } = req.body;
+// END OF REFERENCE FOR VIDEO 
 
-  // First, a SQL query to check if there is already a product with the provided product_id
+
+// Route to insert a new product in 
+// Post is used to send data to our server on phpMyAdmin 
+app.post("/insertProduct", (req, res) => {
+  // Assigning variables to insert
+  const { 
+    product_name, 
+    product_id, 
+    stock, 
+    supplier_id 
+  } = req.body;
+
+  //SQL query to check for product_id's in the products table for duplicates
   const checkSql = "SELECT product_id FROM products WHERE product_id = ?";
   db.query(checkSql, [product_id], (err, result) => {
     if (err) {
-      // If there is an error executing the query, log it and send a 500 error response
+      // Give error message if there is one
       console.error(err);
-      return res.status(500).json({ message: "Error checking product ID" });
+      return res.json({ message: "Error checking product ID" });
     }
-    // Check the length of the result array; if it is greater than 0, it means at least one record was found
-    // This indicates that a product with this product_id already exists in the database
+    // When checking the length of the result array, if it is more than 0, then...
     if (result.length > 0) {
-      // If the product_id already exists, return a 409 Conflict status, indicating a duplicate entry
-      return res.status(409).json({ message: "Product ID already exists" });
+      // the product_id already exists, so return an error message
+      return res.json({ message: "Product ID already exists!" });
     }
 
-    // If no existing product_id is found, proceed to insert the new product
+    // If no existing product_id is found (we got past all of the conditional checks), then insert the new product
     const sql =
       "INSERT INTO products (product_name, product_id, stock, supplier_id) VALUES (?, ?, ?, ?)";
     db.query(
       sql,
-      [product_name, product_id, stock, supplier_id],
+      [product_name, product_id, stock, supplier_id], // inserting in all of the columns we need 
       (err, result) => {
+        // if there is an error return an error message
         if (err) {
           console.error(err);
-          return res.status(500).json({ message: "Error inserting product" });
+          return res.json({ message: "Error inserting product" });
         }
-        res.status(201).json({
+        // If no error, give a successfully inserted message 
+        res.json({
           message: "Product inserted successfully",
-          productId: result.insertId,
+
+          // productId: result.insertId, (MIGHT NOT NEED)
         });
       }
     );
@@ -99,52 +114,54 @@ app.post("/insertProduct", (req, res) => {
 
 // Route that deletees an existing product
 app.delete("/deleteProduct/:productId", (req, res) => {
+  // Sets productID from req
   const productId = req.params.productId;
+  // SQL delete a product from product_id
   const sql = "DELETE FROM products WHERE product_id = ?";
-  db.query(sql, productId, (err, result) => {
+  db.query(sql, productId, (err) => {
     if (err) {
+      // if there is an error return an error message 
       console.error(err);
-      return res.status(500).json(err);
+      return res.json({message: "Error in deleting product"});
     }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Product not found" });
-    }
+
+    // If no error, gives a success message
     res.json({ message: "Product deleted successfully" });
   });
 });
 
-// Route that deletes an existing transaction
+// Route that deletes an existing transaction (Code is the same as the delete for products above)
 app.delete("/deleteTransaction/:transactionId", (req, res) => {
   const transactionId = req.params.transactionId;
   const sql = "DELETE FROM transactions WHERE transaction_id = ?";
-  db.query(sql, transactionId, (err, result) => {
+  db.query(sql, transactionId, (err) => {
     if (err) {
       console.error(err);
-      return res.status(500).json(err);
+      return res.json(err);
     }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Transaction not found" });
-    }
+
     res.json({ message: "Transaction deleted successfully" });
   });
 });
 
-// Route to update the stock value of a product
+// Route to update the stock of a product
 app.put("/updateProduct/:productId", (req, res) => {
+  // Getting the variables from req 
   const productId = req.params.productId;
-  const { newStock } = req.body;
+  const { 
+    newStock 
+  } = req.body; // This represents the new stock value to use to updates 
 
   // Update query to update the stock value of the product
   const sql = "UPDATE products SET stock = ? WHERE product_id = ?";
 
   db.query(sql, [newStock, productId], (err, result) => {
     if (err) {
+      // Error message
       console.error(err);
-      return res.status(500).json(err);
+      return res.json(err);
     }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Product not found" });
-    }
+
     res.json({ message: "Product stock updated successfully" });
   });
 });
@@ -152,44 +169,43 @@ app.put("/updateProduct/:productId", (req, res) => {
 // Route to insert a new transaction
 app.post("/insertTransaction", (req, res) => {
   const {
+    // Assigning variables to insert 
     transaction_id,
     customer_id,
     customer_name,
     purchase_amount,
     product_id,
-  } = req.body;
+  } = req.body; 
 
-  // Check if the product_id exists in the products table
+  // Check to see if the product_id exists in the products table
   const checkProductQuery = "SELECT * FROM products WHERE product_id = ?";
   db.query(checkProductQuery, product_id, (err, products) => {
     if (err) {
+      // Error message
       console.error(err);
-      return res.status(500).json(err);
+      return res.json(err);
     }
 
+    // If the products array has a length of zero, then we could find the product_id in the products table
     if (products.length === 0) {
-      return res.status(400).json({ message: "Product does not exist" });
+      return res.json({ message: "Product does not exist" });
     }
 
-    const product = products[0];
-    const currentStock = product.stock;
+    const currentStock = products[0].stock;
 
     // Check if there is enough stock to perform the transaction
     if (currentStock < purchase_amount) {
-      return res.status(400).json({ message: "Not enough stock available" });
+      return res.json({ message: "Not enough stock available" });
     }
 
-    // Update the stock amount in the Products table
+    // Update the stock amount in the Products table once the conditional if-checks are passed
     const updatedStock = currentStock - purchase_amount;
+    // While we are inserting a transaction, this updates the products stock with the updatedStock value 
     const updateStockQuery =
       "UPDATE products SET stock = ? WHERE product_id = ?";
-    db.query(updateStockQuery, [updatedStock, product_id], (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json(err);
-      }
+    db.query(updateStockQuery, [updatedStock, product_id], (err) => {
 
-      // Insert the transaction
+      // After, we can insert into the transaction table 
       const insertQuery =
         "INSERT INTO transactions (transaction_id,customer_id, customer_name, purchase_amount, product_id) VALUES (?,?, ?, ?, ?)";
       db.query(
@@ -204,18 +220,13 @@ app.post("/insertTransaction", (req, res) => {
         (err, result) => {
           if (err) {
             console.error(err);
-            return res.status(500).json(err);
+            // Error message
+            return res.json({ message: "Error inserting into transactions" });
           }
-          res
-            .status(201)
-            .json({ message: "Transaction inserted successfully" });
+          // If we have no errors, then a success message 
+          res.json({ message: "Transaction inserted successfully" });
         }
       );
     });
   });
-});
-
-// Start the server
-app.listen(8071, () => {
-  console.log("Server is working on port 8071");
 });
