@@ -1,0 +1,7 @@
+/* CSS Style for Employees.jsx */
+.message {
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+}

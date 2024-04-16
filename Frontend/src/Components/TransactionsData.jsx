@@ -1,25 +1,27 @@
+// Imports
 import React, { useEffect, useState } from "react";
 import "./Transactions.css"; // Importing the CSS file for styling
 
 function Transactions() {
   const [data, setData] = useState([]); // State variable to hold product data
 
-  // Fetching product data from the server when the component mounts
+   // Fetching transaction data from the server 
+  // Modified version of the code on https://nextjs.org/docs/pages/building-your-application/data-fetching/client-side 
+  // below "Client-side data fetching with useEffect".
   useEffect(() => {
-    fetch("http://localhost:8071/transactions") // Making a GET request to the server
-      .then((res) => res.json()) // Parsing the JSON response
-      .then((data) => setData(data)) // Setting the retrieved data in the state
-      .catch((err) => console.log(err)); // Handling any errors that occur during the request
-  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+    fetch("http://localhost:8071/transactions")
+      .then((res) => res.json()) 
+      .then((data) => setData(data)) 
+  }, []); 
 
-  // Rendering the component
+  // Setting up the table on frontend using css
+  // Same code structure as ProductsData.jsx
   return (
     <div className="container">
       {" "}
-      {/* Using a class from products.css for styling */}
+  
       <table className="table">
         {" "}
-        {/* Using a class from products.css for styling */}
         <thead>
           <tr>
             <th>Transaction ID</th>
@@ -31,7 +33,7 @@ function Transactions() {
           </tr>
         </thead>
         <tbody>
-          {/* Mapping over the product data to render each row */}
+          {/* Mapping over the transaction data to show each row */}
           {data.map((d, i) => (
             <tr key={i}>
               <td>{d.transaction_id}</td>

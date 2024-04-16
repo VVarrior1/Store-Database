@@ -1,10 +1,15 @@
+// Imports
 import React from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./Components/Header";
 import Transactions from "./Components/Transactions";
 import Products from "./Components/Products";
 import Home from "./Components/Home";
+import Employees from "./Components/Employees";
 
+// The frontend initial set up was done through ..
+
+// Routes to AppContent
 function App() {
   return (
     <BrowserRouter>
@@ -13,23 +18,37 @@ function App() {
   );
 }
 
+// Has routes to the home, products and transactions page
 function AppContent() {
-  const location = useLocation(); // This hook returns the location object that represents the current URL
-
   return (
     <>
-      <Header />
+      <Header className/>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/products"
-          element={<Products key={location.key} />} // Unique key forces remount on route change
+        <Route 
+          // Path home is /
+          path="/" 
+          element={<Home />} 
         />
         <Route
+          // Path to /products 
+          path="/products"
+          element={<Products />} 
+        />
+        <Route
+        // Path to /transactions
           path="/transactions"
           element={
             <>
-              <Transactions key={location.key} />
+              <Transactions />
+            </>
+          }
+        />
+        <Route
+        // Path to /transactions
+          path="/employees"
+          element={
+            <>
+              <Employees />
             </>
           }
         />

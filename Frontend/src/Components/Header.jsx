@@ -1,9 +1,11 @@
+// Imports
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 
 function Header() {
   return (
+    // Header that has links which navigates to different routes
     <header className="header">
       <nav className="nav">
         <ul className="nav-list">

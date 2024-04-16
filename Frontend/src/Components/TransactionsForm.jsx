@@ -1,11 +1,18 @@
+// Import 
 import React, { useState } from "react";
-import "./TransactionsForm.css"; // Import the CSS file for styling
+import "./TransactionsForm.css"; 
+
+// Small functino which creates a random ID between 100000000 to 999999999
 function generateRandomId() {
-  const min = 100000000; // Smallest 9-digit number
+  const min = 100000000; // Smallest 9-digit number since if we have a 0 in the front, it will result in a value of 0.
   const max = 999999999; // Largest 9-digit number
+  // This code line below comes from: https://www.geeksforgeeks.org/how-to-generate-random-number-in-react-js/ on the first example on the function "randomNumberInRange"
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+// Learned hangleChange and handleSubmit through https://www.w3schools.com/react/react_forms.asp
 function TransactionsForm() {
+  // setTransaction can be used to update the state of the transaction table 
   const [transaction, setTransaction] = useState({
     transaction_id: generateRandomId(),
     customer_id: "",
@@ -14,13 +21,15 @@ function TransactionsForm() {
     product_id: "",
   });
 
-  const handleChange = (e) => {
-    setTransaction({ ...transaction, [e.target.name]: e.target.value });
+  // Updaets the state of transaction with the value inputed
+  // Structure is the same as the handleChange in ProductForm.jsx
+  const handleChange = (event) => {
+    setTransaction({ ...transaction, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // checks for the insert to make sure that the insert is putting in correct inputs
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // Checks for the insert to make sure that the insert is putting in correct inputs
     if (transaction.purchase_amount <= 0) {
       alert("You need to buy something.");
       return;
@@ -34,26 +43,30 @@ function TransactionsForm() {
       return;
     }
 
-    try {
-      const response = await fetch("http://localhost:8071/insertTransaction", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(transaction),
-      });
-      const data = await response.json();
-      console.log(data);
+    // Using the code on https://apidog.com/blog/fetch-post-json/ below "How to Fetch Post JSON Data" as a base and modified it to fit
+    // Structure the same as in ProductForm.jsx
+    const response = await fetch("http://localhost:8071/insertTransaction", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(transaction),
+    });
+    // Reference ends here 
 
-      window.location.reload(); // Reloads the pages so that the table is refreshed
+    const data = await response.json();
+    console.log(data);
 
-      alert(data.message); // Show a simple alert with the response message
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    location.reload(); // Reloads the pages so that the table is refreshed
+
+    alert(data.message); // Show alert with the response message
+    
   };
 
   // Setting up the submit form (using css to format/style it)
+  // When submitting the form, go to handleSubmit 
+  // For the input, we can dynamically change the value on handleChange
+  // Same structure as the return on ProductForm.jsx
   return (
     <div className="transaction-form-container">
       <h2>Add Transaction</h2>
