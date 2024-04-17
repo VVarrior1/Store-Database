@@ -2,7 +2,7 @@
 // AND ALSO THROUGHOUT THE ENTIRE PROJECT FILES. 
 
 // The package.json file above comes from the "init -y" command (followed from https://www.youtube.com/watch?v=Q3ixb1w-QaY&t=624s at 1:11)
-// The package-lock.json files above comes from the "install express mysql cors nodemon" command (followed from https://www.youtube.com/watch?v=Q3ixb1w-QaY&t=624s at 1:42) 
+// The package-lock.json file and node_modules folder above comes from the "install express mysql cors nodemon" command (followed from https://www.youtube.com/watch?v=Q3ixb1w-QaY&t=624s at 1:42) 
 
 
 // This starter code below which connects to the MySQL database comes from https://www.youtube.com/watch?v=Q3ixb1w-QaY&t=624s by "Code With Yousaf" 
