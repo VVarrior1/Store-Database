@@ -1,6 +1,6 @@
 // Imports
 import React, { useEffect, useState } from "react";
-import "./Transactions.css"; // Importing the CSS file for styling
+import "./Transactions.css";
 
 function Transactions() {
   const [data, setData] = useState([]); // State variable to hold product data

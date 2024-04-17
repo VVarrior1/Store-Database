@@ -2,7 +2,7 @@
 import React from "react";
 import "./Home.css";
 
-// Format for the main home [age ]
+// Format for the main home 
 const Home = () => {
   return (
     <div className="home">
@@ -13,7 +13,7 @@ const Home = () => {
       <div className="image-container">
         <img
           className="main-image"
-          // This is from https://pngtree.com/freepng/shopping-mall-logo_5406131.html 
+          // This image is from https://pngtree.com/freepng/shopping-mall-logo_5406131.html 
           src="https://png.pngtree.com/element_our/20200610/ourmid/pngtree-shopping-mall-logo-image_2235997.jpg"
           alt="storefront image"
         />

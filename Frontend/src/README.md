@@ -1,0 +1,1 @@
+"npm create vite@latest" and "npm install" was used to set up the development environment for front end, this came from https://www.youtube.com/watch?v=Q3ixb1w-QaY&t=624s as well. 

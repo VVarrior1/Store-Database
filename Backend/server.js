@@ -5,8 +5,8 @@
 // The package-lock.json file and node_modules folder above comes from the "install express mysql cors nodemon" command (followed from https://www.youtube.com/watch?v=Q3ixb1w-QaY&t=624s at 1:42) 
 
 
-// This starter code below which connects to the MySQL database comes from https://www.youtube.com/watch?v=Q3ixb1w-QaY&t=624s by "Code With Yousaf" 
-// The reference to this video starts here ... 
+// This setup code below which connects to the MySQL database comes from https://www.youtube.com/watch?v=Q3ixb1w-QaY&t=624s by "Code With Yousaf" 
+// The reference to this video starts HERE ... 
 
 const express = require("express");
 const mysql = require("mysql");

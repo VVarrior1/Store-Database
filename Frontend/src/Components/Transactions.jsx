@@ -6,7 +6,7 @@ import TrasactionsDelete from "./TransactionsDelete";
 
 const Transactions = () => {
   return (
-    // Setting up the page with Transactions Data and a contaienr for TransactionForm/Delete
+    // Setting up the page with Transactions Data and a contaienr for TransactionForm and TransactionDelete
     <div className = "transactions">
         <TransactionsData />
       <div className="big-transactions-container">

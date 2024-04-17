@@ -7,8 +7,6 @@ import Products from "./Components/Products";
 import Home from "./Components/Home";
 import Employees from "./Components/Employees";
 
-// The frontend initial set up was done through ..
-
 // Routes to AppContent
 function App() {
   return (
@@ -44,7 +42,7 @@ function AppContent() {
           }
         />
         <Route
-        // Path to /transactions
+        // Path to /employees
           path="/employees"
           element={
             <>
